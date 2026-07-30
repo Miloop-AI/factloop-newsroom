@@ -96,7 +96,7 @@ Researcher takes no model at all. Defaults live in `.env.example`; any role left
 | Detector | `google/gemini-2.5-flash-lite` | `OPENROUTER_MODEL_DETECTOR` |
 | Translator | `anthropic/claude-haiku-4.5` | `OPENROUTER_MODEL_TRANSLATOR` |
 | Journalist | `google/gemini-2.5-pro` | `OPENROUTER_MODEL_JOURNALIST` |
-| Fact-Checker | `openai/gpt-5` | `OPENROUTER_MODEL_FACTCHECKER` |
+| Fact-Checker | `anthropic/claude-sonnet-5` | `OPENROUTER_MODEL_FACTCHECKER` |
 | GEO Optimizer | `google/gemini-2.5-flash` | `OPENROUTER_MODEL_GEO` |
 | Researcher | None (pure code, no model) | n/a |
 

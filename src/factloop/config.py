@@ -48,7 +48,9 @@ class Settings(BaseSettings):
     journalist_model: str = Field(
         default="google/gemini-2.5-pro", alias="OPENROUTER_MODEL_JOURNALIST"
     )
-    factchecker_model: str = Field(default="openai/gpt-5", alias="OPENROUTER_MODEL_FACTCHECKER")
+    factchecker_model: str = Field(
+        default="anthropic/claude-sonnet-5", alias="OPENROUTER_MODEL_FACTCHECKER"
+    )
     geo_model: str = Field(default="google/gemini-2.5-flash", alias="OPENROUTER_MODEL_GEO")
 
     @property
