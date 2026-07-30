@@ -66,7 +66,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 # actually guards the paid pipeline.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[_settings.allowed_origin],
+    allow_origins=_settings.allowed_origins,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Content-Type"],
 )

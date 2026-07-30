@@ -146,7 +146,8 @@ if it needed to scale.
 ### How is abuse contained?
 Keys live only in the server environment, and callers never send them. `/generate` is rate-limited
 per client IP (default `5/hour`) via slowapi, keyed off the real caller from `X-Forwarded-For` rather
-than the proxy. CORS is scoped to a single origin. The rate limiter uses in-memory storage, so it is
+than the proxy. CORS is scoped to an explicit allowlist of origins. The rate limiter uses in-memory
+storage, so it is
 exact only with a single worker (which the Render config pins); the counter resets on restart and is
 not shared across instances, and a Redis backend would be the swap-in to scale out.
 
@@ -166,7 +167,7 @@ All secrets and model choices come from the environment (see `.env.example`); no
 | `OPENROUTER_API_KEY` | LLM gateway |
 | `OPENROUTER_MODEL` | Fallback model for any agent left unset |
 | `OPENROUTER_MODEL_DETECTOR` / `_TRANSLATOR` / `_JOURNALIST` / `_FACTCHECKER` / `_GEO` | Per-agent models |
-| `ALLOWED_ORIGIN` | CORS origin the API accepts (default `https://miloop.ai`) |
+| `ALLOWED_ORIGIN` | Comma-separated CORS origins the API accepts (default `https://miloop.ai,http://localhost:8000`) |
 | `RATE_LIMIT` | Per-IP limit on `/generate` (default `5/hour`) |
 
 ## Layout

@@ -107,16 +107,23 @@ def test_health_is_open(client):
     assert response.json() == {"status": "ok"}
 
 
-def test_cors_allows_only_miloop(client):
-    response = client.options(
+def _preflight(client, origin):
+    return client.options(
         "/generate",
-        headers={
-            "Origin": "https://miloop.ai",
-            "Access-Control-Request-Method": "POST",
-        },
+        headers={"Origin": origin, "Access-Control-Request-Method": "POST"},
     )
 
-    assert response.headers["access-control-allow-origin"] == "https://miloop.ai"
+
+def test_cors_allows_each_configured_origin(client):
+    for origin in ("https://miloop.ai", "http://localhost:8000"):
+        response = _preflight(client, origin)
+        assert response.headers.get("access-control-allow-origin") == origin
+
+
+def test_cors_blocks_unlisted_origin(client):
+    response = _preflight(client, "https://evil.example.com")
+
+    assert response.headers.get("access-control-allow-origin") != "https://evil.example.com"
 
 
 def test_rate_limit_blocks_sixth_request_with_retry_after(client, monkeypatch):

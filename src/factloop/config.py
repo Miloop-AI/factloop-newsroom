@@ -28,8 +28,12 @@ class Settings(BaseSettings):
     request_timeout_seconds: float = Field(default=30.0, alias="REQUEST_TIMEOUT_SECONDS")
 
     # Public-service knobs, read from the environment so the deployment can retune
-    # them without a code change. The origin defaults to Miloop AI's own site.
-    allowed_origin: str = Field(default="https://miloop.ai", alias="ALLOWED_ORIGIN")
+    # them without a code change. ALLOWED_ORIGIN is a comma-separated list so the
+    # production site and a local dev server can both be permitted; it defaults to
+    # Miloop AI's own site plus localhost.
+    allowed_origin: str = Field(
+        default="https://miloop.ai,http://localhost:8000", alias="ALLOWED_ORIGIN"
+    )
     rate_limit: str = Field(default="5/hour", alias="RATE_LIMIT")
 
     default_model: str = Field(default="", alias="OPENROUTER_MODEL")
@@ -46,6 +50,11 @@ class Settings(BaseSettings):
     )
     factchecker_model: str = Field(default="openai/gpt-5", alias="OPENROUTER_MODEL_FACTCHECKER")
     geo_model: str = Field(default="google/gemini-2.5-flash", alias="OPENROUTER_MODEL_GEO")
+
+    @property
+    def allowed_origins(self) -> list[str]:
+        """The configured CORS origins, split from the comma-separated setting."""
+        return [origin.strip() for origin in self.allowed_origin.split(",") if origin.strip()]
 
     def model_for(self, role: str) -> str:
         """Model slug for an agent role, falling back to the shared default."""
