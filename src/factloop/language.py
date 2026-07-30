@@ -33,7 +33,7 @@ def _statistical_guess(text: str) -> tuple[str | None, float]:
 
     Only a script that belongs to essentially one language carries a signal: kana
     is unique to Japanese, hangul to Korean, and Han with no kana is almost always
-    Chinese. Latin — and every other script shared across many languages — yields
+    Chinese. Latin (and every other script shared across many languages) yields
     no guess and zero confidence, so the caller's single rule sends it to the model
     just as it would any other low-confidence input.
     """

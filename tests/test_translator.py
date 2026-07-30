@@ -57,7 +57,7 @@ def test_annotation_kept_when_original_name_is_in_source(monkeypatch):
 
 
 def test_fabricated_annotation_is_stripped(monkeypatch):
-    # The source only says "the senator" — no name — so a parenthesized name the
+    # The source only says "the senator" (no name), so a parenthesized name the
     # model produced is ungrounded and must be removed, leaving no invented English.
     fake = FakeLLM(structured=TranslatedClaims(claims=["參議員(Scott Wiener) 提出了該法案。"]))
     monkeypatch.setattr(llm, "build_llm", lambda _role: fake)

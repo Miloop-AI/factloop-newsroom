@@ -8,12 +8,12 @@ from factloop.graph import run_newsroom
 # Varied so a caught hallucination reads as the system working, not an error.
 _BLOCKED_MESSAGES = [
     "Fact-check stopped this one: the draft kept asserting things the sources never "
-    "said, so it was held back rather than published. That guardrail just did its job — "
-    "try a different or more specific keyword.",
+    "said, so it was held back rather than published. That guardrail just did its job. "
+    "Try a different or more specific keyword.",
     "Quality control blocked publication. The writer couldn't stay within what the "
     "sources actually support, and the checker refused to let it through. Give it "
     "another angle or a sharper keyword.",
-    "No verified article this time — the fact-checker flagged claims with no source "
+    "No verified article this time. The fact-checker flagged claims with no source "
     "backing and stopped the piece. That's the safety net working; try another keyword.",
 ]
 

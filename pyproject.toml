@@ -6,6 +6,8 @@ build-backend = "setuptools.build_meta"
 name = "factloop-newsroom"
 version = "0.1.0"
 description = "Multi-agent newsroom that fact-checks and rewrites recent news in the reader's language."
+authors = [{ name = "Miloop AI", email = "info@miloop.ai" }]
+license = "MIT"
 requires-python = ">=3.11"
 dependencies = [
     "fastmcp>=2.3",

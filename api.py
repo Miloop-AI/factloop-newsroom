@@ -1,7 +1,7 @@
 """FastAPI entry point for the deployable newsroom service.
 
-A thin adapter over :func:`factloop.graph.run_newsroom` — the same pipeline the
-Streamlit ``app.py`` drives locally — exposing it as a rate-limited, CORS-scoped
+A thin adapter over :func:`factloop.graph.run_newsroom` (the same pipeline the
+Streamlit ``app.py`` drives locally), exposing it as a rate-limited, CORS-scoped
 HTTP endpoint. All secrets come from the server environment via ``get_settings``;
 nothing is accepted from the caller but the keyword itself.
 """
@@ -62,7 +62,7 @@ app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # CORS is enforced by the browser only; it keeps the endpoint off other sites'
-# pages but does nothing against scripted clients — the rate limiter is what
+# pages but does nothing against scripted clients. The rate limiter is what
 # actually guards the paid pipeline.
 app.add_middleware(
     CORSMiddleware,

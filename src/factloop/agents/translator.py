@@ -5,7 +5,7 @@ from ..schemas import FactFile, FactItem, TranslatedClaims
 from ..state import NewsroomState
 
 # Languages whose script is non-Latin, where transliterating a name loses its
-# original spelling — so pairing the transliteration with the source name helps
+# original spelling, so pairing the transliteration with the source name helps
 # the reader. Latin-script languages keep names verbatim and need no annotation.
 _NON_LATIN_LANGUAGES = frozenset(
     {"zh", "ja", "ko", "ar", "ru", "he", "el", "th", "hi", "fa", "uk"}
@@ -42,7 +42,7 @@ def _verify_annotations(claim: str, source_text: str) -> str:
 
     The model is asked to annotate transliterated names with their originals, but a
     model can hallucinate a plausible name, so this is enforced in code rather than
-    trusted: each parenthesized Latin name must appear (loosely — case- and
+    trusted: each parenthesized Latin name must appear (loosely, case- and
     whitespace-insensitively) in the untranslated fact file, or the parenthetical is
     stripped entirely. An unverified attribution is worse than none.
     """

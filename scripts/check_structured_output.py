@@ -31,7 +31,7 @@ _FACT_FILE = FactFile(
 _ARTICLE = "The council approved a 40 megawatt tidal power array off the northern pier."
 
 # Same facts rendered in Chinese, but with a planted detail the fact file never
-# states — a named mayor and a press conference. A working cross-lingual checker
+# states (a named mayor and a press conference). A working cross-lingual checker
 # must flag these even though the article and the facts are in different languages.
 _ARTICLE_CROSS_LINGUAL = (
     "北码头外一座 40 兆瓦的潮汐能阵列已获批准,"
