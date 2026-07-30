@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: factloop-newsroom
+    runtime: python
+    plan: free
+    buildCommand: pip install .
+    # A single worker keeps slowapi's in-memory rate-limit counter exact; $PORT is
+    # provided by Render.
+    startCommand: uvicorn api:app --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /health
+    envVars:
+      # Secrets: set these in the Render dashboard, never committed.
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: TAVILY_API_KEY
+        sync: false
+      - key: PYTHON_VERSION
+        value: 3.11.9
