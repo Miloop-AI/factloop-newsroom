@@ -10,3 +10,6 @@ dist/
 .ruff_cache/
 .streamlit/secrets.toml
 .claude/
+
+# Local agent guidance. Kept on disk, out of the repository, in every project.
+CLAUDE.md
