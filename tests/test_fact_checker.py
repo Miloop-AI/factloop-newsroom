@@ -24,6 +24,21 @@ def test_fact_checker_flags_and_counts_a_failure(monkeypatch):
     assert result["revisions"] == 1
 
 
+def test_empty_draft_fails_without_asking_the_model(monkeypatch):
+    """An empty draft contradicts nothing, so it must never earn a pass."""
+
+    def _unreachable(_role):
+        raise AssertionError("an empty draft must be failed without spending a call")
+
+    monkeypatch.setattr(llm, "build_llm", _unreachable)
+
+    result = fact_checker.fact_checker_node(_state("   \n\t  ", revisions=0))
+
+    assert result["fact_check"].passed is False
+    assert result["fact_check"].correction_notes
+    assert result["revisions"] == 1
+
+
 def test_fact_checker_pass_does_not_increment(monkeypatch):
     monkeypatch.setattr(
         llm, "build_llm", lambda _role: FakeLLM(structured=FactCheckResult(passed=True))

@@ -16,14 +16,14 @@ def _search(days, results):
     return lambda _keyword: {"days": days, "results": results}
 
 
-def _dispatcher(verdict):
+def _dispatcher(verdict, article="A short article."):
     def build(role):
         if role == "detector":
             return FakeLLM(content="en")
         if role == "translator":
             return FakeLLM(structured=TranslatedClaims(claims=["翻一", "翻二"]))
         if role == "journalist":
-            return FakeLLM(content="A short article.")
+            return FakeLLM(content=article)
         if role == "factchecker":
             return FakeLLM(structured=verdict)
         if role == "geo":
@@ -58,6 +58,27 @@ def test_persistent_hallucination_is_blocked_after_max_revisions(monkeypatch, ta
     assert result.get("geo") is None
     assert result["revisions"] == graph.MAX_REVISIONS
     assert result["fact_check"].unverified_claims == ["ghost"]
+
+
+def test_empty_drafts_are_blocked_rather_than_published(monkeypatch, tavily_results):
+    """A Journalist that returns nothing must never reach the optimizer.
+
+    Seen live: a reasoning model spent its output budget thinking and returned an
+    empty draft, which the checker had nothing to contradict, so the optimizer
+    published an article invented from its own prompt.
+    """
+    monkeypatch.setattr(researcher, "_fetch", _search(2, tavily_results))
+    # A passing verdict on purpose: the empty draft must be stopped before the
+    # checker is ever consulted, so even a generous verdict cannot let it through.
+    monkeypatch.setattr(
+        llm, "build_llm", _dispatcher(FactCheckResult(passed=True), article="")
+    )
+
+    result = graph.run_newsroom("coastal tidal energy")
+
+    assert result["qc_blocked"] is True
+    assert result.get("geo") is None
+    assert result["revisions"] == graph.MAX_REVISIONS
 
 
 def test_no_results_stops_before_writing(monkeypatch):

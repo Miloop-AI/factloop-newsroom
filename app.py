@@ -28,6 +28,21 @@ def _render_article(state):
         st.markdown("**SEO keywords:** " + ", ".join(geo.seo_keywords))
 
 
+def _render_block_reason(fact_check):
+    """Say what the checker objected to, whichever way it objected.
+
+    A blocked run does not always carry claims: a draft that came back empty has
+    none, and only the correction notes explain why it was stopped.
+    """
+    if fact_check.unverified_claims:
+        st.markdown("**Claims the fact-checker could not verify:**")
+        for claim in fact_check.unverified_claims:
+            st.markdown(f"- {claim}")
+    elif fact_check.correction_notes:
+        st.markdown("**What the fact-checker objected to:**")
+        st.markdown(fact_check.correction_notes)
+
+
 def _render_sources(state):
     st.markdown("#### Sources")
     days = state.get("coverage_days")
@@ -59,9 +74,7 @@ if st.button("Run newsroom", type="primary") and keyword.strip():
         st.warning("No recent news matched that topic. Try a broader or more current keyword.")
     elif state.get("qc_blocked"):
         st.info(random.choice(_BLOCKED_MESSAGES))
-        st.markdown("**Claims the fact-checker could not verify:**")
-        for claim in state["fact_check"].unverified_claims:
-            st.markdown(f"- {claim}")
+        _render_block_reason(state["fact_check"])
     else:
         _render_article(state)
         _render_sources(state)
